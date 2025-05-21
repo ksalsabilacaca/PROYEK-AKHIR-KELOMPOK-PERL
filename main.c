@@ -28,7 +28,7 @@ typedef struct {
     Gender gender;
 } User;
 
-void menuMakanan(Makanan makanan[], int n) {
+void tampilkanMenuMakanan(Makanan makanan[], int n) {
     printf("\n=== Daftar Makanan ===\n");
     // printing out calorie, protein, carbs, fat composition of a food / 100g
     for (int i = 0; i < n; i++) {
@@ -62,7 +62,7 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
                 printf("Daftar makanan kosong, silakan input makanan baru.\n");
                 metode = 2;
             } else {
-                menuMakanan(makananList, *jumlahMakanan);
+                tampilkanMenuMakanan(makananList, *jumlahMakanan);
                 int pilihan = inputIntMin("Pilih makanan (nomor): ", 1);
                 while (pilihan < 1 || pilihan > *jumlahMakanan) {
                     printf("Pilihan tidak valid.\n");
