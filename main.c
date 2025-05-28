@@ -51,6 +51,8 @@ int inputIntRange(const char *prompt, int min, int max) {
     return value;
 }
 
+// == FUNCTION inputUser KHUSUS DARI SABBIA ==
+
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
