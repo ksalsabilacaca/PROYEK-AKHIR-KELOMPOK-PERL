@@ -41,6 +41,15 @@ int inputIntMin (const char *prompt, int min)  {
 }
 
 // === FUNCTION inputIntRange KHUSUS DARI SABBIA ==
+int inputIntRange(const char *prompt, int min, int max) {
+    int value;
+    do {
+        printf("%s", prompt);
+        scanf("%d", &value);
+        while(getchar() != '\n');
+    } while(value < min || value > max);
+    return value;
+}
 
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
