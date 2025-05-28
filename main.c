@@ -28,6 +28,8 @@ typedef struct {
     Gender gender;
 } User;
 
+// === FUNCTION inputIntMin KHUSUS DARI SABBIA ===
+
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
