@@ -80,20 +80,26 @@ int inputIntRange(const char *prompt, int min, int max) {           // Fungsi in
 
 
 // == FUNCTION inputUser KHUSUS DARI SABBIA ==
-void inputUser(User *user) {
-    printf("== Nutrition Track == \n");
-    printf("Program ini mendukung SDG 3: Good Health and Well - Being\n");
-    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n");
-    printf("Masukkan nama Anda: ");
-    scanf(" %[^\n]", user->nama);
-    user->nama[99] = '\0';
+void inputUser(User *user) {                                                      // Fungsi ini dipakai buat ngisi data pengguna di awal program Nutrition Track.
+                                                                                  // Jadi semua info penting kayak nama, umur, gender, berat, dan tinggi akan disimpan di struct 'User'.
 
-    user->umur = inputIntMin("Masukkan umur Anda: ", 0);
+    printf("=== Nutrition Track ===\n");                                          // Tampilkan judul program biar user tahu dia lagi pakai aplikasi apa.
+    printf("Program ini mendukung SDG 3: Good Health and Well-Being\n");         // Info penting: program ini berkontribusi ke tujuan pembangunan berkelanjutan (SDG) nomor 3.
+    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n"); // Jelasin tujuan aplikasinya: bantu user biar gaya hidupnya lebih sehat.
 
-    int pilihan;
-    pilihan = inputIntRange("Jenis kelamin (1 = Laki - laki, 2 = Perempuan): ", 1, 2);
-    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
+    printf("Masukkan nama Anda: ");                                              // Minta user untuk mengisi nama mereka.
+    scanf(" %[^\n]", user->nama);                                                // Baca nama lengkap yang diketik user (termasuk spasi).
+    user->nama[99] = '\0';                                                       // Pastikan nama maksimal 99 karakter biar nggak overflow dan program tetap aman.
+
+    user->umur = inputIntMin("Masukkan umur Anda: ", 0);                         // Minta user masukkan umur, minimal 0 tahun.
+                                                                                  // Umur ini penting buat hitung kebutuhan kalori harian nantinya.
+
+    int pilihan;                                                                 // Variabel sementara buat nyimpan pilihan gender user (1 atau 2).
+    pilihan = inputIntRange("Jenis kelamin (1 = Laki-laki, 2 = Perempuan): ", 1, 2); // Tampilkan pilihan gender, user harus isi 1 atau 2 aja.
+    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;                        // Konversi angka yang dipilih user jadi enum gender, disimpan di struct User.
+
 }
+
 
 
 int inputAktivitas() {
