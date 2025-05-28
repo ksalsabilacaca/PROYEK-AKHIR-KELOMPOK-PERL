@@ -152,7 +152,8 @@ void inisialisasiMakanan(Makanan **makananList, int *jumlahMakanan, int *kapasit
     }
 }
 
-// Function untuk menampilkan menu makanan, dibuat oleh Qais
+// Function untuk menampilkan daftar menu makanan yang ingin dipilih
+// Dikerjakan oleh Qais Ismail
 void tampilkanMenuMakanan(Makanan makanan[], int n) {
     printf("\n=== Daftar Makanan ===\n");
     // printing out calorie, protein, carbs, fat composition of a food / 100g
@@ -240,7 +241,8 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
     }
 }
 
-// Function untuk menghitung wellness score, dibuat oleh Qais
+// Function untuk menghitung wellness score
+// Dikerjakan Qais Ismail
 float hitungWellnessScore(float totalKalori, int kebutuhanKalori, float protein, float karbo, float lemak,
                           int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
     // tentukan calorie score
