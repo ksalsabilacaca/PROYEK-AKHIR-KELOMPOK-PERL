@@ -67,6 +67,8 @@ void inputUser(User *user) {
     user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
 }
 
+// == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
+
 
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
