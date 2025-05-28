@@ -28,6 +28,46 @@ typedef struct {
     Gender gender;
 } User;
 
+// === FUNCTION inputIntMin KHUSUS DARI SABBIA ===
+int inputIntMin (const char *prompt, int min)  {
+    int value, rc;
+    do {
+        printf("%s", prompt);
+        rc = scanf("%d", &value);
+        while(getchar() != '\n');
+    } while(rc != 1 || value < min);
+    return value;
+
+}
+
+// === FUNCTION inputIntRange KHUSUS DARI SABBIA ==
+int inputIntRange(const char *prompt, int min, int max) {
+    int value;
+    do {
+        printf("%s", prompt);
+        scanf("%d", &value);
+        while(getchar() != '\n');
+    } while(value < min || value > max);
+    return value;
+}
+
+// == FUNCTION inputUser KHUSUS DARI SABBIA ==
+void inputUser(User *user) {
+    printf("== Nutrition Track == \n");
+    printf("Program ini mendukung SDG 3: Good Health and Well - Being\n");
+    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n");
+    printf("Masukkan nama Anda: ");
+    scanf(" %[^\n]", user->nama);
+    user->nama[99] = '\0';
+
+    user->umur = inputIntMin("Masukkan umur Anda: ", 0);
+
+    int pilihan;
+    pilihan = inputIntRange("Jenis kelamin (1 = Laki - laki, 2 = Perempuan): ", 1, 2);
+    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
+}
+
+
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
@@ -74,6 +114,17 @@ void tampilkanMenuMakanan(Makanan makanan[], int n) {
         printf("%d. %s (per 100g) - %d kcal", i + 1, makanan[i].nama, makanan[i].kalori);
         printf(", %dg protein, %dg karbo, %dg lemak\n", makanan[i].protein, makanan[i].karbo, makanan[i].lemak);
     }
+}
+
+// == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
+void tampilkanHeader(User user, const char* tanggal) {
+    printf("\n========================================\n");
+    printf(" WELCOME TO NUTRITIONTRACK\n");
+    printf(" Your Smart Health Assistant \n");
+    printf("========================================\n");
+    printf("Nama Pengguna: %s\n", user.nama);
+    printf("Umur: %d tahun\n", user.umur);
+    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan");
 }
 
 void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsumsiList,
