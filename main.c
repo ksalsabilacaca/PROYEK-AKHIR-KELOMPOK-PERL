@@ -28,6 +28,7 @@ typedef struct {
     Gender gender;
 } User;
 
+
 // Function ini berfungsi untuk mengambil jenis dan durasi aktivitas fisik user
 // Dikerjakan Novatama Eka Fitria
 int inputAktivitas() {
