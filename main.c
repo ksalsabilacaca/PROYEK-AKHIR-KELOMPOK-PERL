@@ -67,8 +67,6 @@ void inputUser(User *user) {
     user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
 }
 
-// == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
-
 
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
@@ -117,6 +115,8 @@ void tampilkanMenuMakanan(Makanan makanan[], int n) {
         printf(", %dg protein, %dg karbo, %dg lemak\n", makanan[i].protein, makanan[i].karbo, makanan[i].lemak);
     }
 }
+
+// == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
 
 void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsumsiList,
                    int *jumlahKonsumsi, int *kapasitasKonsumsi) {
