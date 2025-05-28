@@ -100,6 +100,8 @@ void inputUser(User *user) {                                                    
 
 }
 
+// Function ini berfungsi untuk mengambil jenis dan durasi aktivitas fisik user
+// Dikerjakan Novatama Eka Fitria
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
@@ -122,21 +124,74 @@ int inputAktivitas() {
     }
 }
 
+// Function ini berfungsi untuk mengambil jumlah air minum (gelas) yang dikonsumsi user
+// Dikerjakan Novatama Eka Fitria
 int inputAirMinum() {
     return inputIntMin("\nBerapa gelas air yang diminum hari ini? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi tidur user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputTidur() {
     return inputIntMin("Berapa jam Anda tidur? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi screen time user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputScreenTime() {
     return inputIntMin("Berapa jam screen time (TV/HP/Komputer)? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil mood user dengan skala 1 sampai 5
+// Dikerjakan Novatama Eka Fitria
 int inputMood() {
     int mood = inputIntRange("Bagaimana mood Anda hari ini? (1=sangat buruk ... 5=sangat baik): ", 1, 5);
     return mood;
+}
+
+void inisialisasiMakanan(Makanan **makananList, int *jumlahMakanan, int *kapasitasMakanan) {
+    Makanan daftar[] = {
+        {"Nasi Putih", 175, 4, 40, 1},
+        {"Ayam Goreng", 260, 20, 5, 18},
+        {"Tahu Goreng", 120, 10, 3, 8},
+        {"Tempe Goreng", 150, 12, 6, 9},
+        {"Sayur Bayam", 40, 3, 6, 1},
+        {"Telur Rebus", 155, 13, 1, 11},
+        {"Roti Gandum", 250, 9, 45, 3},
+        {"Ikan Bakar", 200, 22, 0, 10},
+        {"Kentang Rebus", 86, 2, 20, 0},
+        {"Susu Sapi", 60, 3, 5, 3},
+        {"Apel", 52, 0, 14, 0},
+        {"Pisang", 89, 1, 23, 0},
+        {"Wortel", 41, 1, 10, 0},
+        {"Brokoli", 55, 4, 11, 1},
+        {"Kacang Merah", 127, 9, 23, 0}
+    };
+
+    int n = sizeof(daftar) / sizeof(daftar[0]);
+    *kapasitasMakanan = n > 10 ? n : 10; // Minimal kapasitas awal = 10
+    *jumlahMakanan = 0;
+
+    *makananList = (Makanan *) malloc(n * sizeof(Makanan));
+    if (*makananList == NULL) {
+        printf("Gagal mengalokasikan memori untuk daftar makanan.\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < n; i++) {
+        // Realloc jika kapasitas tidak cukup (jaga-jaga kalau n bisa lebih besar)
+        if (*jumlahMakanan >= *kapasitasMakanan) {
+            *kapasitasMakanan *= 2;
+            Makanan *temp = (Makanan *) realloc(*makananList, *kapasitasMakanan * sizeof(Makanan));
+			if (temp == NULL) {
+			    printf("Gagal mengalokasikan ulang memori untuk daftar makanan.\n");
+			    exit(1);
+			}
+			*makananList = temp;
+        }
+        (*makananList)[*jumlahMakanan] = daftar[i];
+        (*jumlahMakanan)++;
+    }
 }
 
 void tampilkanMenuMakanan(Makanan makanan[], int n) {
@@ -234,6 +289,8 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
     }
 }
 
+// Function ini berfungsi untuk memberikan saran kepada user berdasarkan data gaya hidup yang telah dimasukkan
+// Dikerjakan Novatama Eka Fitria
 void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
     printf("\n=== Tips dan Saran untuk Anda ===\n");
 
@@ -270,6 +327,110 @@ void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airM
     } else {
         printf("- Jaga mood dan kesehatan tubuhmu ya.\n");
     }
+}
+
+void tampilkanRingkasanGabungan(User user, Konsumsi konsumsiList[], int jumlahKonsumsi) {
+    float totalKalori = 0, totalProtein = 0, totalKarbo = 0, totalLemak = 0;
+    // Kalkulasi total nutrisi
+    for (int i = 0; i < jumlahKonsumsi; i++) {
+        Konsumsi k = konsumsiList[i];
+        totalKalori += k.item.kalori * k.gram / 100;
+        totalProtein += k.item.protein * k.gram / 100;
+        totalKarbo += k.item.karbo * k.gram / 100;
+        totalLemak += k.item.lemak * k.gram / 100;
+    }
+
+    int kebutuhanKalori = hitungKebutuhanKalori(user);
+    user.aktivitas = inputAktivitas();
+    int airMinum = inputAirMinum();
+    int jamTidur = inputTidur();
+    int screenTime = inputScreenTime();
+    int mood = inputMood();
+    
+    printf("\n========================================\n");
+    printf(" WELCOME TO NUTRITION TRACK\n");
+    printf(" Your Smart Health Assistant\n");
+    printf("========================================\n\n");
+    
+    // Ringkasan Profil User
+	printf("=== Profil Pengguna ===\n");
+	printf("Nama          : %s\n", user.nama);
+	printf("Jenis Kelamin : %s\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan");
+    printf("Umur          : %d tahun\n", user.umur);
+	printf("Berat Badan   : %.1f kg\n", user.berat);
+	printf("Tinggi Badan  : %.1f cm\n\n", user.tinggi);
+
+    // Ringkasan Total
+    printf("=== Kebutuhan Kalori Harian ===\n");
+    printf("Kebutuhan Kalori Anda     : %.0f kcal\n", (float)kebutuhanKalori);
+    printf("Kalori yang sudah dipenuhi: %.1f kcal\n", totalKalori);
+    float selisihKalori = totalKalori - kebutuhanKalori;
+
+    if (selisihKalori < -100) {
+        printf("Status Kalori: Masih kurang %.1f kcal\n", -selisihKalori);
+    } else if (selisihKalori > 100) {
+        printf("Status Kalori: Kelebihan %.1f kcal\n", selisihKalori);
+    } else {
+        printf("Status Kalori: Sudah cukup sesuai kebutuhan!\n");
+    }
+
+    printf("\n=== Ringkasan Konsumsi Total ===\n");
+    for (int i = 0; i < jumlahKonsumsi; i++) {
+        Konsumsi k = konsumsiList[i];
+        printf("%s - %dg\n", k.item.nama, k.gram);
+    }
+
+    printf("\nTotal Kalori : %.1f kcal\n", totalKalori);
+    printf("Total Protein: %.1f g\n", totalProtein);
+    printf("Total Karbo  : %.1f g\n", totalKarbo);
+    printf("Total Lemak  : %.1f g\n", totalLemak);
+
+    // Ringkasan per waktu makan
+    printf("\n=== Ringkasan Konsumsi per Waktu Makan ===\n");
+    const char* labelWaktu[] = {"Pagi", "Siang", "Malam"};
+
+    for (int waktu = 0; waktu < 3; waktu++) {
+        printf("\n[%s]\n", labelWaktu[waktu]);
+        float kaloriW = 0;
+        int ada = 0;
+        for (int i = 0; i < jumlahKonsumsi; i++) {
+            if (konsumsiList[i].waktu == waktu) {
+                printf("- %s (%dg)\n", konsumsiList[i].item.nama, konsumsiList[i].gram);
+                kaloriW += konsumsiList[i].item.kalori * konsumsiList[i].gram / 100;
+                ada = 1;
+            }
+        }
+        if (!ada) {
+            printf("(Tidak ada konsumsi tercatat)\n");
+        } else {
+            printf("Total kalori waktu ini: %.1f kcal\n", kaloriW);
+        }
+    }
+
+    // Aktivitas dan Gaya Hidup
+    printf("\n=== Ringkasan Aktivitas dan Gaya Hidup ===\n");
+    printf("Aktivitas Fisik : %d menit\n", user.aktivitas);
+    printf("Air Diminum     : %d gelas\n", airMinum);
+    printf("Tidur           : %d jam\n", jamTidur);
+    printf("Screen Time     : %d jam\n", screenTime);
+    printf("Mood            : %d / 5\n", mood);
+
+    // BMI
+    float bmi = hitungBMI(user.berat, user.tinggi);
+    printf("BMI Anda        : %.2f\n", bmi);
+    if (bmi < 18.5) {
+        printf("Kategori        : Berat badan kurang\n");
+    } else if (bmi < 25) {
+        printf("Kategori        : Normal\n");
+    } else if (bmi < 30) {
+        printf("Kategori        : Berat badan berlebih\n");
+    } else {
+        printf("Kategori        : Obesitas\n");
+    }
+
+    float skorWellbeing = hitungWellnessScore(totalKalori, kebutuhanKalori, totalProtein, totalKarbo, totalLemak, user.aktivitas, airMinum, jamTidur, screenTime, mood);
+    printf("\n=== Skor Wellbeing Anda: %.2f / 100 ===\n", skorWellbeing);
+    tampilkanTips(totalKalori, kebutuhanKalori, user.aktivitas, airMinum, jamTidur, screenTime, mood);
 }
 
 int main() {
