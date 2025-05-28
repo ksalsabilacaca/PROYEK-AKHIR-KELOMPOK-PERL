@@ -29,6 +29,16 @@ typedef struct {
 } User;
 
 // === FUNCTION inputIntMin KHUSUS DARI SABBIA ===
+int inputIntMin (const char *prompt, int min)  {
+    int value, rc;
+    do {
+        printf("%s", prompt);
+        rc = scanf("%d", &value);
+        while(getchar() != '\n');
+    } while(rc != 1 || value < min);
+    return value;
+
+}
 
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
