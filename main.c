@@ -28,6 +28,8 @@ typedef struct {
     Gender gender;
 } User;
 
+// Function ini berfungsi untuk mengambil jenis dan durasi aktivitas fisik user
+// Dikerjakan Novatama Eka Fitria
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
@@ -50,18 +52,26 @@ int inputAktivitas() {
     }
 }
 
+// Function ini berfungsi untuk mengambil jumlah air minum (gelas) yang dikonsumsi user
+// Dikerjakan Novatama Eka Fitria
 int inputAirMinum() {
     return inputIntMin("\nBerapa gelas air yang diminum hari ini? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi tidur user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputTidur() {
     return inputIntMin("Berapa jam Anda tidur? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi screen time user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputScreenTime() {
     return inputIntMin("Berapa jam screen time (TV/HP/Komputer)? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil mood user dengan skala 1 sampai 5
+// Dikerjakan Novatama Eka Fitria
 int inputMood() {
     int mood = inputIntRange("Bagaimana mood Anda hari ini? (1=sangat buruk ... 5=sangat baik): ", 1, 5);
     return mood;
@@ -143,6 +153,8 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
     }
 }
 
+// Function ini berfungsi untuk memberikan saran kepada user berdasarkan data gaya hidup yang telah dimasukkan
+// Dikerjakan Novatama Eka Fitria
 void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
     printf("\n=== Tips dan Saran untuk Anda ===\n");
 
