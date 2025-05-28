@@ -117,6 +117,15 @@ void tampilkanMenuMakanan(Makanan makanan[], int n) {
 }
 
 // == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
+void tampilkanHeader(User user, const char* tanggal) {
+    printf("\n========================================\n");
+    printf(" WELCOME TO NUTRITIONTRACK\n");
+    printf(" Your Smart Health Assistant \n");
+    printf("========================================\n");
+    printf("Nama Pengguna: %s\n", user.nama);
+    printf("Umur: %d tahun\n", user.umur);
+    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan");
+}
 
 void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsumsiList,
                    int *jumlahKonsumsi, int *kapasitasKonsumsi) {
