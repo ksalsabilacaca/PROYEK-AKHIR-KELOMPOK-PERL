@@ -54,15 +54,30 @@ int inputIntMin(const char *prompt, int min) {                  // Fungsi ini di
 
 
 // === FUNCTION inputIntRange KHUSUS DARI SABBIA ==
-int inputIntRange(const char *prompt, int min, int max) {
-    int value;
-    do {
-        printf("%s", prompt);
-        scanf("%d", &value);
-        while(getchar() != '\n');
-    } while(value < min || value > max);
-    return value;
+int inputIntRange(const char *prompt, int min, int max) {           // Fungsi ini gunanya buat minta input angka dari user,
+                                                                    // tapi angkanya harus ada di antara nilai minimal dan maksimal.
+                                                                    // Contohnya di Nutrition Track, kita bisa pakai ini buat milih jenis kelamin (1 atau 2),
+                                                                    // atau buat input skala mood 1–5, screen time, dan lain-lain.
+
+    int value;                                                      // Ini variabel buat nyimpan angka yang diketik sama user.
+
+    do {                                                            // Mulai perulangan, biar kita bisa ngecek terus sampai input-nya valid.
+
+        printf("%s", prompt);                                       // Tampilkan pertanyaan atau perintah ke user, misalnya:
+                                                                    // "Masukkan mood Anda (1 = sangat buruk, 5 = sangat baik): "
+
+        scanf("%d", &value);                                        // Baca angka dari keyboard dan simpan ke 'value'.
+
+        while(getchar() != '\n');                                   // Bersihin sisa karakter di input (misalnya enter, spasi, huruf yang nggak sengaja diketik),
+                                                                    // supaya nggak ganggu input berikutnya.
+
+    } while (value < min || value > max);                           // Ulangin terus kalau angka yang dimasukkan kurang dari batas bawah
+                                                                    // atau lebih dari batas atas. Misalnya user disuruh pilih antara 1–5,
+                                                                    // tapi dia ngisi 6, maka bakal diminta isi ulang.
+
+    return value;                                                   // Kalau angkanya udah di dalam range yang kita mau, kita balikin nilainya.
 }
+
 
 // == FUNCTION inputUser KHUSUS DARI SABBIA ==
 void inputUser(User *user) {
