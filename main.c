@@ -28,6 +28,45 @@ typedef struct {
     Gender gender;
 } User;
 
+int inputAktivitas() {
+    printf("\n=== Input Aktivitas Fisik ===\n");
+    printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
+    printf("1. Tidak ada aktivitas\n");
+    printf("2. Jalan kaki ringan (30 menit)\n");
+    printf("3. Lari sedang (60 menit)\n");
+    printf("4. Latihan intensif (90 menit)\n");
+    printf("Pilihan Anda: ");
+    int pilihan;
+    scanf("%d", &pilihan);
+
+    switch (pilihan) {
+        case 1: return 0;
+        case 2: return 30;
+        case 3: return 60;
+        case 4: return 90;
+        default: 
+            printf("Pilihan tidak valid. Dianggap tidak ada aktivitas.\n");
+            return 0;
+    }
+}
+
+int inputAirMinum() {
+    return inputIntMin("\nBerapa gelas air yang diminum hari ini? ", 0);
+}
+
+int inputTidur() {
+    return inputIntMin("Berapa jam Anda tidur? ", 0);
+}
+
+int inputScreenTime() {
+    return inputIntMin("Berapa jam screen time (TV/HP/Komputer)? ", 0);
+}
+
+int inputMood() {
+    int mood = inputIntRange("Bagaimana mood Anda hari ini? (1=sangat buruk ... 5=sangat baik): ", 1, 5);
+    return mood;
+}
+
 void tampilkanMenuMakanan(Makanan makanan[], int n) {
     printf("\n=== Daftar Makanan ===\n");
     // printing out calorie, protein, carbs, fat composition of a food / 100g
@@ -101,6 +140,44 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
         (*jumlahKonsumsi)++;
 
         lanjut = inputIntMin("Tambah makanan lagi? (1=Ya, 0=Tidak): ", 0);
+    }
+}
+
+void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
+    printf("\n=== Tips dan Saran untuk Anda ===\n");
+
+    if (totalKalori < kebutuhanKalori) {
+        printf("- Tambah makanan bergizi untuk mencukupi kebutuhan kalori harian.\n");
+    } else if (totalKalori > kebutuhanKalori + 500) {
+        printf("- Perhatikan porsi makan agar tidak berlebihan kalori.\n");
+    }
+
+    if (aktivitas < 30) {
+        printf("- Coba jalan kaki sebentar atau lakukan aktivitas fisik ringan.\n");
+    } else {
+        printf("- Aktivitas fisik Anda sudah baik, pertahankan ya!\n");
+    }
+
+    if (airMinum < 8) {
+        printf("- Minum air putih lebih banyak agar tubuh tetap terhidrasi.\n");
+    }
+
+    if (jamTidur < 7) {
+        printf("- Usahakan tidur minimal 7 jam agar tubuh lebih segar.\n");
+    } else if (jamTidur > 9) {
+        printf("- Tidur terlalu lama juga bisa kurang baik, jaga pola tidur.\n");
+    }
+
+    if (screenTime > 12) {
+        printf("- Kurangi screen time malam agar mata dan otak lebih rileks.\n");
+    }
+
+    if (mood <= 2) {
+        printf("- Hari ini memang berat, tapi kamu bisa mulai lagi besok.\n");
+    } else if (mood >= 4) {
+        printf("- Mood kamu bagus hari ini, pertahankan semangatnya!\n");
+    } else {
+        printf("- Jaga mood dan kesehatan tubuhmu ya.\n");
     }
 }
 
