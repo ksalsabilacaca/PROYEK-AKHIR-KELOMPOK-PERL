@@ -52,6 +52,21 @@ int inputIntRange(const char *prompt, int min, int max) {
 }
 
 // == FUNCTION inputUser KHUSUS DARI SABBIA ==
+void inputUser(User *user) {
+    printf("== Nutrition Track == \n");
+    printf("Program ini mendukung SDG 3: Good Health and Well - Being\n");
+    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n");
+    printf("Masukkan nama Anda: ");
+    scanf(" %[^\n]", user->nama);
+    user->nama[99] = '\0';
+
+    user->umur = inputIntMin("Masukkan umur Anda: ", 0);
+
+    int pilihan;
+    pilihan = inputIntRange("Jenis kelamin (1 = Laki - laki, 2 = Perempuan): ", 1, 2);
+    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
+}
+
 
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
