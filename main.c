@@ -152,6 +152,7 @@ void inisialisasiMakanan(Makanan **makananList, int *jumlahMakanan, int *kapasit
     }
 }
 
+// Function untuk menampilkan menu makanan, dibuat oleh Qais
 void tampilkanMenuMakanan(Makanan makanan[], int n) {
     printf("\n=== Daftar Makanan ===\n");
     // printing out calorie, protein, carbs, fat composition of a food / 100g
@@ -237,6 +238,69 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
 
         lanjut = inputIntMin("Tambah makanan lagi? (1=Ya, 0=Tidak): ", 0);
     }
+}
+
+// Function untuk menghitung wellness score, dibuat oleh Qais
+float hitungWellnessScore(float totalKalori, int kebutuhanKalori, float protein, float karbo, float lemak,
+                          int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
+    // tentukan calorie score
+    float skorKalori = 100.0f - (abs(totalKalori - kebutuhanKalori) * 100.0f / kebutuhanKalori);
+    if (skorKalori < 0) skorKalori = 0;
+
+    // tentukan protein score
+    float skorProtein;
+    if (protein >= 50 && protein <= 70) skorProtein = 100.0f;
+    else if (protein < 50) skorProtein = protein * 2.0f;
+    else skorProtein = 140.0f - protein * 0.5f;
+
+    if (skorProtein < 0) skorProtein = 0;
+    else if (skorProtein > 100) skorProtein = 100;
+    
+    // tentukan carb score
+    float skorKarbo;
+    if (karbo >= 130 && karbo <= 300) skorKarbo = 100.0f;
+    else if (karbo < 130) skorKarbo = karbo * 100.0f / 130.0f;
+    else skorKarbo = 300.0f * 100.0f / karbo;
+
+    if (skorKarbo > 100) skorKarbo = 100;
+
+    // tentukan fat score
+    float skorLemak;
+    if (lemak <= 70) skorLemak = 100.0f;
+    else skorLemak = 100.0f - ((lemak - 70) * 100.0f / 70.0f);
+
+    if (skorLemak < 0) skorLemak = 0;
+    
+    // tentukan activity score
+    float skorAktivitas;
+    if (aktivitas >= 30) skorAktivitas = 100.0f;
+    else skorAktivitas = aktivitas * 3.33f;
+
+    // tentukan hydration score
+    float skorAirMinum;
+    if (airMinum >= 8) skorAirMinum = 100.0f;
+    else skorAirMinum = airMinum * 12.5f;
+    
+    // tentukan sleep score
+    float skorTidur;
+    if (jamTidur >= 7 && jamTidur <= 9) skorTidur = 100.0f;
+    else skorTidur = jamTidur * 100.0f / 9.0f;
+
+    if (skorTidur > 100) skorTidur = 100;
+
+    // tentukan skor waktu penggunaan gadget
+    float skorScreenTime;
+    if (screenTime <= 4) skorScreenTime = 100.0f;
+    else skorScreenTime = 100.0f - (screenTime - 4) * 10.0f;
+
+    if (skorScreenTime < 0) skorScreenTime = 0;
+
+    // tentukan mood score
+    float skorMood = mood * 20.0f;
+
+    // rata-ratakan seluruh skor
+    return (skorKalori + skorProtein + skorKarbo + skorLemak +
+            skorAktivitas + skorAirMinum + skorTidur + skorScreenTime + skorMood) / 9.0f;
 }
 
 void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
