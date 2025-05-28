@@ -29,16 +29,29 @@ typedef struct {
 } User;
 
 // === FUNCTION inputIntMin KHUSUS DARI SABBIA ===
-int inputIntMin (const char *prompt, int min)  {
-    int value, rc;
-    do {
-        printf("%s", prompt);
-        rc = scanf("%d", &value);
-        while(getchar() != '\n');
-    } while(rc != 1 || value < min);
-    return value;
+int inputIntMin(const char *prompt, int min) {                  // Fungsi ini dipakai buat minta input angka dari user, 
+                                                                // tapi angka itu harus lebih besar atau sama dengan nilai minimal yang kita tentuin.
+                                                                // Misalnya, buat input umur atau berat badan di Nutrition Track — kan nggak mungkin umur negatif.
 
+    int value, rc;                                              // Kita siapin dua variabel: 'value' buat nyimpen angka yang diketik user, 
+                                                                // dan 'rc' buat ngecek input-nya berhasil dibaca atau nggak.
+
+    do {                                                        // Kita masukin ke do-while biar terus ngulang sampe input-nya valid.
+
+        printf("%s", prompt);                                   // Tampilkan pertanyaan ke user (misalnya: "Masukkan umur Anda:").
+
+        rc = scanf("%d", &value);                               // Baca input angka dari user dan simpan ke 'value'.
+                                                                // 'rc' bakal nilainya 1 kalau user ngisi angka dengan benar.
+
+        while(getchar() != '\n');                               // Ini buat bersihin sisa karakter yang mungkin masih nyangkut di buffer (kayak Enter atau spasi).
+                                                                // Biar input selanjutnya nggak ikut-ikutan kacau.
+
+    } while(rc != 1 || value < min);                            // Ulangin terus kalau input-nya bukan angka (rc ≠ 1) atau angkanya kurang dari minimal.
+                                                                // Misalnya: kita pengen minimal berat badan itu 1 kg — kalau user ngisi 0 atau -5, bakal diminta ulang.
+
+    return value;                                               // Kalau input-nya udah valid dan sesuai syarat, langsung kita balikin nilainya.
 }
+
 
 // === FUNCTION inputIntRange KHUSUS DARI SABBIA ==
 int inputIntRange(const char *prompt, int min, int max) {
