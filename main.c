@@ -100,8 +100,6 @@ void inputUser(User *user) {                                                    
 
 }
 
-
-
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
@@ -151,15 +149,23 @@ void tampilkanMenuMakanan(Makanan makanan[], int n) {
 }
 
 // == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
-void tampilkanHeader(User user, const char* tanggal) {
-    printf("\n========================================\n");
-    printf(" WELCOME TO NUTRITIONTRACK\n");
-    printf(" Your Smart Health Assistant \n");
-    printf("========================================\n");
-    printf("Nama Pengguna: %s\n", user.nama);
-    printf("Umur: %d tahun\n", user.umur);
-    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan");
+void tampilkanHeader(User user, const char* tanggal) {                              // Fungsi ini dipakai buat nampilin header alias bagian atas tampilan,
+                                                                                     // yang berisi info dasar user. Jadi, user tahu datanya udah tercatat.
+
+    printf("\n========================================\n");                         // Garis pembatas biar tampilannya rapi dan menarik dilihat.
+    printf(" WELCOME TO NUTRITIONTRACK\n");                                          // Tampilkan sambutan selamat datang buat user, kasih kesan ramah.
+    printf(" Your Smart Health Assistant \n");                                       // Penjelasan singkat bahwa program ini adalah asisten pintar untuk bantu jaga gizi dan kesehatan.
+    printf("========================================\n");                         // Garis penutup bagian header supaya tampilannya simetris.
+
+    printf("Nama Pengguna: %s\n", user.nama);                                       // Nampilin nama user yang udah dimasukin sebelumnya,
+                                                                                     // supaya user merasa lebih personal dan diingat sama aplikasi.
+
+    printf("Umur: %d tahun\n", user.umur);                                           // Nampilin umur user, info ini penting karena berpengaruh ke kebutuhan gizi harian.
+
+    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan"); // Tampilkan gender user dengan teks yang jelas (bukan angka),
+                                                                                     // karena kebutuhan kalori laki-laki dan perempuan bisa beda, jadi penting buat penyesuaian fitur selanjutnya.
 }
+
 
 void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsumsiList,
                    int *jumlahKonsumsi, int *kapasitasKonsumsi) {
