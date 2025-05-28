@@ -29,45 +29,79 @@ typedef struct {
 } User;
 
 // === FUNCTION inputIntMin KHUSUS DARI SABBIA ===
-int inputIntMin (const char *prompt, int min)  {
-    int value, rc;
-    do {
-        printf("%s", prompt);
-        rc = scanf("%d", &value);
-        while(getchar() != '\n');
-    } while(rc != 1 || value < min);
-    return value;
+int inputIntMin(const char *prompt, int min) {                  // Fungsi ini dipakai buat minta input angka dari user, 
+                                                                // tapi angka itu harus lebih besar atau sama dengan nilai minimal yang kita tentuin.
+                                                                // Misalnya, buat input umur atau berat badan di Nutrition Track — kan nggak mungkin umur negatif.
 
+    int value, rc;                                              // Kita siapin dua variabel: 'value' buat nyimpen angka yang diketik user, 
+                                                                // dan 'rc' buat ngecek input-nya berhasil dibaca atau nggak.
+
+    do {                                                        // Kita masukin ke do-while biar terus ngulang sampe input-nya valid.
+
+        printf("%s", prompt);                                   // Tampilkan pertanyaan ke user (misalnya: "Masukkan umur Anda:").
+
+        rc = scanf("%d", &value);                               // Baca input angka dari user dan simpan ke 'value'.
+                                                                // 'rc' bakal nilainya 1 kalau user ngisi angka dengan benar.
+
+        while(getchar() != '\n');                               // Ini buat bersihin sisa karakter yang mungkin masih nyangkut di buffer (kayak Enter atau spasi).
+                                                                // Biar input selanjutnya nggak ikut-ikutan kacau.
+
+    } while(rc != 1 || value < min);                            // Ulangin terus kalau input-nya bukan angka (rc ≠ 1) atau angkanya kurang dari minimal.
+                                                                // Misalnya: kita pengen minimal berat badan itu 1 kg — kalau user ngisi 0 atau -5, bakal diminta ulang.
+
+    return value;                                               // Kalau input-nya udah valid dan sesuai syarat, langsung kita balikin nilainya.
 }
+
 
 // === FUNCTION inputIntRange KHUSUS DARI SABBIA ==
-int inputIntRange(const char *prompt, int min, int max) {
-    int value;
-    do {
-        printf("%s", prompt);
-        scanf("%d", &value);
-        while(getchar() != '\n');
-    } while(value < min || value > max);
-    return value;
+int inputIntRange(const char *prompt, int min, int max) {           // Fungsi ini gunanya buat minta input angka dari user,
+                                                                    // tapi angkanya harus ada di antara nilai minimal dan maksimal.
+                                                                    // Contohnya di Nutrition Track, kita bisa pakai ini buat milih jenis kelamin (1 atau 2),
+                                                                    // atau buat input skala mood 1–5, screen time, dan lain-lain.
+
+    int value;                                                      // Ini variabel buat nyimpan angka yang diketik sama user.
+
+    do {                                                            // Mulai perulangan, biar kita bisa ngecek terus sampai input-nya valid.
+
+        printf("%s", prompt);                                       // Tampilkan pertanyaan atau perintah ke user, misalnya:
+                                                                    // "Masukkan mood Anda (1 = sangat buruk, 5 = sangat baik): "
+
+        scanf("%d", &value);                                        // Baca angka dari keyboard dan simpan ke 'value'.
+
+        while(getchar() != '\n');                                   // Bersihin sisa karakter di input (misalnya enter, spasi, huruf yang nggak sengaja diketik),
+                                                                    // supaya nggak ganggu input berikutnya.
+
+    } while (value < min || value > max);                           // Ulangin terus kalau angka yang dimasukkan kurang dari batas bawah
+                                                                    // atau lebih dari batas atas. Misalnya user disuruh pilih antara 1–5,
+                                                                    // tapi dia ngisi 6, maka bakal diminta isi ulang.
+
+    return value;                                                   // Kalau angkanya udah di dalam range yang kita mau, kita balikin nilainya.
 }
+
 
 // == FUNCTION inputUser KHUSUS DARI SABBIA ==
-void inputUser(User *user) {
-    printf("== Nutrition Track == \n");
-    printf("Program ini mendukung SDG 3: Good Health and Well - Being\n");
-    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n");
-    printf("Masukkan nama Anda: ");
-    scanf(" %[^\n]", user->nama);
-    user->nama[99] = '\0';
+void inputUser(User *user) {                                                      // Fungsi ini dipakai buat ngisi data pengguna di awal program Nutrition Track.
+                                                                                  // Jadi semua info penting kayak nama, umur, gender, berat, dan tinggi akan disimpan di struct 'User'.
 
-    user->umur = inputIntMin("Masukkan umur Anda: ", 0);
+    printf("=== Nutrition Track ===\n");                                          // Tampilkan judul program biar user tahu dia lagi pakai aplikasi apa.
+    printf("Program ini mendukung SDG 3: Good Health and Well-Being\n");         // Info penting: program ini berkontribusi ke tujuan pembangunan berkelanjutan (SDG) nomor 3.
+    printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n"); // Jelasin tujuan aplikasinya: bantu user biar gaya hidupnya lebih sehat.
 
-    int pilihan;
-    pilihan = inputIntRange("Jenis kelamin (1 = Laki - laki, 2 = Perempuan): ", 1, 2);
-    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;
+    printf("Masukkan nama Anda: ");                                              // Minta user untuk mengisi nama mereka.
+    scanf(" %[^\n]", user->nama);                                                // Baca nama lengkap yang diketik user (termasuk spasi).
+    user->nama[99] = '\0';                                                       // Pastikan nama maksimal 99 karakter biar nggak overflow dan program tetap aman.
+
+    user->umur = inputIntMin("Masukkan umur Anda: ", 0);                         // Minta user masukkan umur, minimal 0 tahun.
+                                                                                  // Umur ini penting buat hitung kebutuhan kalori harian nantinya.
+
+    int pilihan;                                                                 // Variabel sementara buat nyimpan pilihan gender user (1 atau 2).
+    pilihan = inputIntRange("Jenis kelamin (1 = Laki-laki, 2 = Perempuan): ", 1, 2); // Tampilkan pilihan gender, user harus isi 1 atau 2 aja.
+    user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;                        // Konversi angka yang dipilih user jadi enum gender, disimpan di struct User.
+
 }
 
-
+// Function ini berfungsi untuk mengambil jenis dan durasi aktivitas fisik user
+// Dikerjakan Novatama Eka Fitria
 int inputAktivitas() {
     printf("\n=== Input Aktivitas Fisik ===\n");
     printf("Pilih jenis aktivitas yang dilakukan hari ini:\n");
@@ -90,18 +124,26 @@ int inputAktivitas() {
     }
 }
 
+// Function ini berfungsi untuk mengambil jumlah air minum (gelas) yang dikonsumsi user
+// Dikerjakan Novatama Eka Fitria
 int inputAirMinum() {
     return inputIntMin("\nBerapa gelas air yang diminum hari ini? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi tidur user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputTidur() {
     return inputIntMin("Berapa jam Anda tidur? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil durasi screen time user dalam sehari
+// Dikerjakan Novatama Eka Fitria
 int inputScreenTime() {
     return inputIntMin("Berapa jam screen time (TV/HP/Komputer)? ", 0);
 }
 
+// Function ini berfungsi untuk mengambil mood user dengan skala 1 sampai 5
+// Dikerjakan Novatama Eka Fitria
 int inputMood() {
     int mood = inputIntRange("Bagaimana mood Anda hari ini? (1=sangat buruk ... 5=sangat baik): ", 1, 5);
     return mood;
@@ -164,15 +206,23 @@ void tampilkanMenuMakanan(Makanan makanan[], int n) {
 }
 
 // == FUNCTION tampilkanHeader KHUSUS DARI SABBIA ==
-void tampilkanHeader(User user, const char* tanggal) {
-    printf("\n========================================\n");
-    printf(" WELCOME TO NUTRITIONTRACK\n");
-    printf(" Your Smart Health Assistant \n");
-    printf("========================================\n");
-    printf("Nama Pengguna: %s\n", user.nama);
-    printf("Umur: %d tahun\n", user.umur);
-    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan");
+void tampilkanHeader(User user, const char* tanggal) {                              // Fungsi ini dipakai buat nampilin header alias bagian atas tampilan,
+                                                                                     // yang berisi info dasar user. Jadi, user tahu datanya udah tercatat.
+
+    printf("\n========================================\n");                         // Garis pembatas biar tampilannya rapi dan menarik dilihat.
+    printf(" WELCOME TO NUTRITIONTRACK\n");                                          // Tampilkan sambutan selamat datang buat user, kasih kesan ramah.
+    printf(" Your Smart Health Assistant \n");                                       // Penjelasan singkat bahwa program ini adalah asisten pintar untuk bantu jaga gizi dan kesehatan.
+    printf("========================================\n");                         // Garis penutup bagian header supaya tampilannya simetris.
+
+    printf("Nama Pengguna: %s\n", user.nama);                                       // Nampilin nama user yang udah dimasukin sebelumnya,
+                                                                                     // supaya user merasa lebih personal dan diingat sama aplikasi.
+
+    printf("Umur: %d tahun\n", user.umur);                                           // Nampilin umur user, info ini penting karena berpengaruh ke kebutuhan gizi harian.
+
+    printf("Gender: %s\n\n", user.gender == LAKI_LAKI ? "Laki-laki" : "Perempuan"); // Tampilkan gender user dengan teks yang jelas (bukan angka),
+                                                                                     // karena kebutuhan kalori laki-laki dan perempuan bisa beda, jadi penting buat penyesuaian fitur selanjutnya.
 }
+
 
 void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsumsiList,
                    int *jumlahKonsumsi, int *kapasitasKonsumsi) {
@@ -241,6 +291,7 @@ void inputKonsumsi(Makanan makananList[], int *jumlahMakanan, Konsumsi **konsums
     }
 }
 
+
 // Function untuk menghitung wellness score
 // Dikerjakan Qais Ismail
 float hitungWellnessScore(float totalKalori, int kebutuhanKalori, float protein, float karbo, float lemak,
@@ -305,6 +356,9 @@ float hitungWellnessScore(float totalKalori, int kebutuhanKalori, float protein,
             skorAktivitas + skorAirMinum + skorTidur + skorScreenTime + skorMood) / 9.0f;
 }
 
+
+// Function ini berfungsi untuk memberikan saran kepada user berdasarkan data gaya hidup yang telah dimasukkan
+// Dikerjakan Novatama Eka Fitria
 void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
     printf("\n=== Tips dan Saran untuk Anda ===\n");
 
