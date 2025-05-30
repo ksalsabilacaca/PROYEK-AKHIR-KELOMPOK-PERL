@@ -43,7 +43,6 @@ typedef struct {
 int inputIntMin(const char *prompt, int min) {                  // Fungsi ini dipakai buat minta input angka dari user, 
                                                                 // tapi angka itu harus lebih besar atau sama dengan nilai minimal yang kita tentuin.
                                                                 // Misalnya, buat input umur atau berat badan di Nutrition Track — kan nggak mungkin umur negatif.
-
     int value, rc;                                              // Kita siapin dua variabel: 'value' buat nyimpen angka yang diketik user, 
                                                                 // dan 'rc' buat ngecek input-nya berhasil dibaca atau nggak.
 
@@ -57,7 +56,7 @@ int inputIntMin(const char *prompt, int min) {                  // Fungsi ini di
         while(getchar() != '\n');                               // Ini buat bersihin sisa karakter yang mungkin masih nyangkut di buffer (kayak Enter atau spasi).
                                                                 // Biar input selanjutnya nggak ikut-ikutan kacau.
 
-    } while(rc != 1 || value < min);                            // Ulangin terus kalau input-nya bukan angka (rc ≠ 1) atau angkanya kurang dari minimal.
+    } while(rc != 1 || value < min);                            // Ulangin terus kalau input-nya bukan angka (rc ? 1) atau angkanya kurang dari minimal.
                                                                 // Misalnya: kita pengen minimal berat badan itu 1 kg — kalau user ngisi 0 atau -5, bakal diminta ulang.
 
     return value;                                               // Kalau input-nya udah valid dan sesuai syarat, langsung kita balikin nilainya.
@@ -69,7 +68,6 @@ int inputIntRange(const char *prompt, int min, int max) {           // Fungsi in
                                                                     // tapi angkanya harus ada di antara nilai minimal dan maksimal.
                                                                     // Contohnya di Nutrition Track, kita bisa pakai ini buat milih jenis kelamin (1 atau 2),
                                                                     // atau buat input skala mood 1–5, screen time, dan lain-lain.
-
     int value;                                                      // Ini variabel buat nyimpan angka yang diketik sama user.
 
     do {                                                            // Mulai perulangan, biar kita bisa ngecek terus sampai input-nya valid.
@@ -89,12 +87,10 @@ int inputIntRange(const char *prompt, int min, int max) {           // Fungsi in
     return value;                                                   // Kalau angkanya udah di dalam range yang kita mau, kita balikin nilainya.
 }
 
-
 // Function inputUser ini tempat semua data user masuk kayak nama, umur, gender, berat, tinggi. Aku ngebikin ini biar semuanya dikumpulin satu tempat, dan aku manfaatin dua fungsi yang tadi (inputIntMin & inputIntRange) buat ngecek valid nggaknya inputnya. Jadi user gak bakal salah masukin umur atau berat. 
 // Dikerjakan oleh Sabbia Meilandri Putri Delarosya
 void inputUser(User *user) {                                                      // Fungsi ini dipakai buat ngisi data pengguna di awal program Nutrition Track.
                                                                                   // Jadi semua info penting kayak nama, umur, gender, berat, dan tinggi akan disimpan di struct 'User'.
-
     printf("=== Nutrition Track ===\n");                                          // Tampilkan judul program biar user tahu dia lagi pakai aplikasi apa.
     printf("Program ini mendukung SDG 3: Good Health and Well-Being\n");         // Info penting: program ini berkontribusi ke tujuan pembangunan berkelanjutan (SDG) nomor 3.
     printf("dengan membantu pengguna memantau dan menyeimbangkan asupan gizi anda.\n\n"); // Jelasin tujuan aplikasinya: bantu user biar gaya hidupnya lebih sehat.
@@ -110,7 +106,13 @@ void inputUser(User *user) {                                                    
     pilihan = inputIntRange("Jenis kelamin (1 = Laki-laki, 2 = Perempuan): ", 1, 2); // Tampilkan pilihan gender, user harus isi 1 atau 2 aja.
     user->gender = (pilihan == 1) ? LAKI_LAKI : PEREMPUAN;                        // Konversi angka yang dipilih user jadi enum gender, disimpan di struct User.
 
+    user->berat = (float)inputIntMin("Masukkan berat badan Anda (kg): ", 1);     // Minta input berat badan user, minimal 1 kg.
+                                                                                  // Data berat ini nanti dipakai buat hitung BMI dan kebutuhan kalori.
+
+	user->tinggi = (float)inputIntMin("Masukkan tinggi badan Anda (cm): ", 50);  // Minta input tinggi badan user, minimal 50 cm.
+                                                                                  // Tinggi badan juga dipakai untuk hitung BMI yang akan bantu nilai status gizi user.
 }
+
 
 // Function ini berfungsi untuk mengambil jenis dan durasi aktivitas fisik user
 // Dikerjakan Novatama Eka Fitria
@@ -220,8 +222,9 @@ void inisialisasiMakanan(Makanan **makananList, int *jumlahMakanan, int *kapasit
         printf("Gagal mengalokasikan memori untuk daftar makanan.\n");
         exit(1);
     }
-
-    for (int i = 0; i < n; i++) {
+	
+	int i = 0;
+    for (i = 0; i < n; i++) {
         // Realloc jika kapasitas tidak cukup (jaga-jaga kalau n bisa lebih besar)
         if (*jumlahMakanan >= *kapasitasMakanan) {
             *kapasitasMakanan *= 2;
@@ -239,12 +242,13 @@ void inisialisasiMakanan(Makanan **makananList, int *jumlahMakanan, int *kapasit
 
 // Function untuk menampilkan daftar menu makanan yang ingin dipilih
 // Dikerjakan oleh Qais Ismail
-void tampilkanMenuMakanan(Makanan makanan[], int n) {
-    printf("\n=== Daftar Makanan ===\n");
-    // printing out calorie, protein, carbs, fat composition of a food / 100g
-    for (int i = 0; i < n; i++) {
-        printf("%d. %s (per 100g) - %d kcal", i + 1, makanan[i].nama, makanan[i].kalori);
-        printf(", %dg protein, %dg karbo, %dg lemak\n", makanan[i].protein, makanan[i].karbo, makanan[i].lemak);
+void tampilkanMenuMakanan(Makanan makananList[], int n) {
+    printf("\n--- Daftar Makanan ---\n");
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("%d. %s (per 100g) - %d kcal, %dg protein, %dg karbo, %dg lemak\n",
+            i + 1, makananList[i].nama, makananList[i].kalori, makananList[i].protein,
+            makananList[i].karbo, makananList[i].lemak);
     }
 }
 
@@ -413,7 +417,6 @@ float hitungWellnessScore(float totalKalori, int kebutuhanKalori, float protein,
             skorAktivitas + skorAirMinum + skorTidur + skorScreenTime + skorMood) / 9.0f;
 }
 
-
 // Function ini berfungsi untuk memberikan saran kepada user berdasarkan data gaya hidup yang telah dimasukkan
 // Dikerjakan Novatama Eka Fitria
 void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airMinum, int jamTidur, int screenTime, int mood) {
@@ -459,21 +462,26 @@ void tampilkanTips(int totalKalori, int kebutuhanKalori, int aktivitas, int airM
 void tampilkanRingkasanGabungan(User user, Konsumsi konsumsiList[], int jumlahKonsumsi) {
     float totalKalori = 0, totalProtein = 0, totalKarbo = 0, totalLemak = 0;
     // Kalkulasi total nutrisi
-    for (int i = 0; i < jumlahKonsumsi; i++) {
+    int i = 0;
+    for (i = 0; i < jumlahKonsumsi; i++) {
         Konsumsi k = konsumsiList[i];
         totalKalori += k.item.kalori * k.gram / 100;
         totalProtein += k.item.protein * k.gram / 100;
         totalKarbo += k.item.karbo * k.gram / 100;
         totalLemak += k.item.lemak * k.gram / 100;
     }
-
-    int kebutuhanKalori = hitungKebutuhanKalori(user);
-    user.aktivitas = inputAktivitas();
-    int airMinum = inputAirMinum();
-    int jamTidur = inputTidur();
-    int screenTime = inputScreenTime();
-    int mood = inputMood();
     
+    // Hitung kebutuhan kalori harian berdasarkan data user
+    int kebutuhanKalori = hitungKebutuhanKalori(user);
+    
+    // Ambil data aktivitas dan gaya hidup dari input pengguna
+    user.aktivitas = inputAktivitas();   // Input durasi aktivitas fisik
+    int airMinum = inputAirMinum();      // Input jumlah air yang diminum (gelas)
+    int jamTidur = inputTidur();         // Input jam tidur
+    int screenTime = inputScreenTime();  // Input screen time (jam)
+    int mood = inputMood();              // Input mood 1-5ang 
+    
+    // Tampilan awal ringkasan
     printf("\n========================================\n");
     printf(" WELCOME TO NUTRITION TRACK\n");
     printf(" Your Smart Health Assistant\n");
@@ -491,8 +499,9 @@ void tampilkanRingkasanGabungan(User user, Konsumsi konsumsiList[], int jumlahKo
     printf("=== Kebutuhan Kalori Harian ===\n");
     printf("Kebutuhan Kalori Anda     : %.0f kcal\n", (float)kebutuhanKalori);
     printf("Kalori yang sudah dipenuhi: %.1f kcal\n", totalKalori);
+    
+    // Cek apakah kalori sudah cukup, kurang, atau kelebihan
     float selisihKalori = totalKalori - kebutuhanKalori;
-
     if (selisihKalori < -100) {
         printf("Status Kalori: Masih kurang %.1f kcal\n", -selisihKalori);
     } else if (selisihKalori > 100) {
@@ -502,11 +511,12 @@ void tampilkanRingkasanGabungan(User user, Konsumsi konsumsiList[], int jumlahKo
     }
 
     printf("\n=== Ringkasan Konsumsi Total ===\n");
-    for (int i = 0; i < jumlahKonsumsi; i++) {
+    for (i = 0; i < jumlahKonsumsi; i++) {
         Konsumsi k = konsumsiList[i];
         printf("%s - %dg\n", k.item.nama, k.gram);
     }
-
+    
+     // Tampilkan total nutrisi keseluruhan
     printf("\nTotal Kalori : %.1f kcal\n", totalKalori);
     printf("Total Protein: %.1f g\n", totalProtein);
     printf("Total Karbo  : %.1f g\n", totalKarbo);
@@ -515,12 +525,14 @@ void tampilkanRingkasanGabungan(User user, Konsumsi konsumsiList[], int jumlahKo
     // Ringkasan per waktu makan
     printf("\n=== Ringkasan Konsumsi per Waktu Makan ===\n");
     const char* labelWaktu[] = {"Pagi", "Siang", "Malam"};
-
-    for (int waktu = 0; waktu < 3; waktu++) {
+	
+	int waktu;
+    for (waktu = 0; waktu < 3; waktu++) {
         printf("\n[%s]\n", labelWaktu[waktu]);
         float kaloriW = 0;
         int ada = 0;
-        for (int i = 0; i < jumlahKonsumsi; i++) {
+        int i;
+        for (i = 0; i < jumlahKonsumsi; i++) {
             if (konsumsiList[i].waktu == waktu) {
                 printf("- %s (%dg)\n", konsumsiList[i].item.nama, konsumsiList[i].gram);
                 kaloriW += konsumsiList[i].item.kalori * konsumsiList[i].gram / 100;
